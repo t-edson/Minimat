@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CONFIG>
+  <General>
+    <VerInspVar Val="False"/>
+  </General>
+  <PanComGen>
+    <Prompt Val=">> "/>
+  </PanComGen>
+  <EdTer>
+    <cTxtNor Val="0"/>
+    <cFonEdi Val="0"/>
+    <cLinAct Val="65535"/>
+    <cResPal Val="15780518"/>
+    <VerBarDesV Val="True"/>
+    <VerBarDesH Val="False"/>
+    <ResPalCur Val="True"/>
+    <MarLinAct Val="False"/>
+    <VerPanVer Val="True"/>
+    <VerNumLin Val="True"/>
+    <VerMarPle Val="True"/>
+    <cFonPan Val="0"/>
+    <cTxtPan Val="0"/>
+    <TamLet Val="10"/>
+    <TipLet Val="Courier New"/>
+    <recient Val=""/>
+  </EdTer>
+</CONFIG>
