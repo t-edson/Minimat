@@ -1,0 +1,19 @@
+object fraCfgGeneral: TfraCfgGeneral
+  Left = 0
+  Height = 240
+  Top = 0
+  Width = 320
+  ClientHeight = 240
+  ClientWidth = 320
+  TabOrder = 0
+  DesignLeft = 397
+  DesignTop = 353
+  object chkVerInspVar: TCheckBox
+    Left = 32
+    Height = 19
+    Top = 72
+    Width = 154
+    Caption = 'Ver &Inspector de variables'
+    TabOrder = 0
+  end
+end
