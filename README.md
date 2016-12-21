@@ -1,5 +1,5 @@
 Minimat
 =======
 
-Minimat es un programa sencillo, que permite graficar funciones matemáticas en el espacio.
+Minimat es un programa desarrollado en Lazarus, que permite realizar cáculos matemáticos simples y permite además graficar funciones matemáticas en el espacio.
 
