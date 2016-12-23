@@ -123,6 +123,9 @@ begin
 
   Config.Iniciar(nil);  //Inicia la configuración
   InicTerminal;   //configura después de iniciar "Config"
+VerGraf3DExecute(self);
+frmGraf3D.btnGraficClick(self);
+frmGraf3D.SetFocus;
 end;
 procedure TfrmPrincipal.FormDestroy(Sender: TObject);
 begin
