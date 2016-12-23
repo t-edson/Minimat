@@ -106,6 +106,8 @@ begin
   mot.Zoom := ZOOM_INI;
   mot.x_des:=10;
   mot.y_des:=120;
+  mot.mAlfa:=0.78;
+  mot.mFi:=0.78;
   ColorButton1.ButtonColor:=$60FF60;
 end;
 procedure TfrmGraf3D.FormDestroy(Sender: TObject);
@@ -116,9 +118,10 @@ end;
 procedure TfrmGraf3D.DibujarEjes;
 begin
   mot.PenColor := clYellow;
-  mot.Line(0,0,0, 3, 0, 0);
-  mot.Line(0,0,0, 0, 3, 0);
-  mot.Line(0,0,0, 0, 0, 3);
+  mot.Line(0,0,0, 5, 0, 0);
+  mot.Line(0,0,0, 0, 5, 0);
+  mot.Line(0,0,0, 0, 0, 5);
+  mot.polilinea3(0,0,0,3,0,0,3,3,0,0,3,0);
 end;
 
 end.

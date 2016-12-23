@@ -1,7 +1,7 @@
 object frmGraf3D: TfrmGraf3D
-  Left = 640
+  Left = 1138
   Height = 437
-  Top = 197
+  Top = 211
   Width = 400
   Caption = 'frmGraf3D'
   ClientHeight = 437
