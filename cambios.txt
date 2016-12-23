@@ -1,2 +1,1 @@
-Se implementa la ventana de configuración, con frames usando la librería MiCOnfig. 
-Se activa el resaltado del prompt.
+Se amplió la libería gráfica 3D, para que se pueda parametrizar los ángulos de vista.
