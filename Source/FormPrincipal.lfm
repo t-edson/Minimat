@@ -13,7 +13,7 @@ object frmPrincipal: TfrmPrincipal
   OnShow = FormShow
   Position = poDesktopCenter
   LCLVersion = '1.6.2.0'
-  inline edTerm: TSynEdit
+  inline edCom: TSynEdit
     Left = 0
     Height = 466
     Top = 0
@@ -456,7 +456,7 @@ object frmPrincipal: TfrmPrincipal
     MouseTextActions = <>
     MouseSelActions = <>
     Lines.Strings = (
-      'edTerm'
+      'edCom'
     )
     VisibleSpecialChars = [vscSpace, vscTabAtLast]
     SelectedColor.BackPriority = 50

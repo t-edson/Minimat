@@ -120,6 +120,7 @@ begin
   //atributo de identificadores
   fAtriIdentif  := TSynHighlighterAttributes.Create('Identif');
   fAtriIdentif.Foreground := clWhite;    //color de letra
+  fAtriIdentif.Style:=[fsBold];
   AddAttribute(fAtriIdentif);
   //atributo de comentarios
   fAtriComent  := TSynHighlighterAttributes.Create('Comment');
@@ -141,6 +142,7 @@ begin
   //atributo de prompt
   fAtriPrompt  := TSynHighlighterAttributes.Create('Prompt');
   fAtriPrompt.Foreground := clAqua;   //color de letra
+  fAtriPrompt.Style:=[fsBold];
 //  fAtriPrompt.Background:= clGreen;
   AddAttribute(fAtriPrompt);
   //atributo de directorio

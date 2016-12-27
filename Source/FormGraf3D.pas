@@ -106,8 +106,8 @@ begin
   mot.Zoom := ZOOM_INI;
   mot.x_des:=10;
   mot.y_des:=120;
-  mot.mAlfa:=0.78;
-  mot.mFi:=0.78;
+  mot.Alfa:=-0.78;
+  mot.Fi:=0.78;
   ColorButton1.ButtonColor:=$60FF60;
 end;
 procedure TfrmGraf3D.FormDestroy(Sender: TObject);

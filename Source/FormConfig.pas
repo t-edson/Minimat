@@ -160,7 +160,7 @@ end;
 
 function TConfig.ContienePrompt(const linAct: string): integer;
 {Verifica si una cadena contiene al prompt. La verificación es simple, compara solo
-el inicio de de la cadena.
+el inicio de la cadena.
 Si la cadena contiene al prompt, devuelve la longitud del prompt hallado, de otra forma
 devuelve cero.
 Se usa para el resaltador de sintaxis y el manejo de pantalla.}
