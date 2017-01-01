@@ -7,8 +7,8 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, FormPrincipal, EvalExpres, MotGraf2d, MotGraf3d, FormGraf3D,
-  FormConfig, FrameCfgSynEdit, FrameCfgGeneral, FrameCfgPanCom
+  Forms, FormPrincipal, EvalExpres, FormGraf3D,
+  FormConfig, GenCod, Parser, FrameCfgSynEdit, FrameCfgGeneral, FrameCfgPanCom
   { you can add units after this };
 
 {$R *.res}

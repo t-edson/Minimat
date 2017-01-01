@@ -42,7 +42,6 @@ type
     fcGeneral : TfraCfgGeneral;
     fcPanCom  : TfraCfgPanCom;   //Panel de comandos
     fcPanComEd: TfraCfgSynEdit;  //Editor de panel de comandos
-MyText: string;
     procedure Iniciar(hl0: TSynFacilComplet);
     procedure LeerArchivoIni;
     procedure escribirArchivoIni;

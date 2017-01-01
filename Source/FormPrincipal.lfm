@@ -2,10 +2,10 @@ object frmPrincipal: TfrmPrincipal
   Left = 288
   Height = 509
   Top = 211
-  Width = 625
+  Width = 736
   Caption = 'Tito''s Minimat'
   ClientHeight = 489
-  ClientWidth = 625
+  ClientWidth = 736
   Menu = MainMenu1
   OnClose = FormClose
   OnCreate = FormCreate
@@ -525,16 +525,16 @@ object frmPrincipal: TfrmPrincipal
     Left = 560
     Height = 466
     Top = 0
-    Width = 65
+    Width = 176
     Align = alClient
     ClientHeight = 466
-    ClientWidth = 65
+    ClientWidth = 176
     TabOrder = 2
     object StringGrid1: TStringGrid
       Left = 1
       Height = 448
       Top = 17
-      Width = 63
+      Width = 174
       Align = alClient
       TabOrder = 0
     end
@@ -542,7 +542,7 @@ object frmPrincipal: TfrmPrincipal
       Left = 1
       Height = 16
       Top = 1
-      Width = 63
+      Width = 174
       Align = alTop
       Alignment = taCenter
       AutoSize = False
@@ -556,7 +556,7 @@ object frmPrincipal: TfrmPrincipal
     Left = 0
     Height = 23
     Top = 466
-    Width = 625
+    Width = 736
     Panels = <    
       item
         Width = 80
@@ -590,6 +590,11 @@ object frmPrincipal: TfrmPrincipal
       Caption = 'Confi&guración'
       OnExecute = HerConfigExecute
     end
+    object acAyuAcerca: TAction
+      Category = 'Ayu'
+      Caption = 'Acerca de ...'
+      OnExecute = acAyuAcercaExecute
+    end
   end
   object MainMenu1: TMainMenu
     left = 364
@@ -613,6 +618,12 @@ object frmPrincipal: TfrmPrincipal
       Caption = '&Herramientas'
       object MenuItem7: TMenuItem
         Action = HerConfig
+      end
+    end
+    object MenuItem8: TMenuItem
+      Caption = 'Ay&uda'
+      object MenuItem9: TMenuItem
+        Action = acAyuAcerca
       end
     end
   end

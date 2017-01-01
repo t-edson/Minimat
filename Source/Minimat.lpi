@@ -67,7 +67,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="11">
+    <Units Count="12">
       <Unit0>
         <Filename Value="Minimat.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -84,51 +84,55 @@
         <IsPartOfProject Value="True"/>
       </Unit2>
       <Unit3>
-        <Filename Value="MotGraf2d.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="MotGraf3d.pas"/>
-        <IsPartOfProject Value="True"/>
-      </Unit4>
-      <Unit5>
         <Filename Value="FormGraf3D.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="frmGraf3D"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit5>
-      <Unit6>
+      </Unit3>
+      <Unit4>
         <Filename Value="uResaltTerm.pas"/>
         <IsPartOfProject Value="True"/>
-      </Unit6>
-      <Unit7>
+      </Unit4>
+      <Unit5>
         <Filename Value="FormConfig.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="Config"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
-      </Unit7>
-      <Unit8>
+      </Unit5>
+      <Unit6>
         <Filename Value="ConfigFrames\FrameCfgSynEdit.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fraCfgSynEdit"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit8>
-      <Unit9>
+      </Unit6>
+      <Unit7>
         <Filename Value="ConfigFrames\FrameCfgGeneral.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fraCfgGeneral"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
-      </Unit9>
-      <Unit10>
+      </Unit7>
+      <Unit8>
         <Filename Value="ConfigFrames\FrameCfgPanCom.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="fraCfgPanCom"/>
         <ResourceBaseClass Value="Frame"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="Parser.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="GenCod.pas"/>
+        <IsPartOfProject Value="True"/>
       </Unit10>
+      <Unit11>
+        <Filename Value="Globales.pas"/>
+        <IsPartOfProject Value="True"/>
+      </Unit11>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
@@ -139,7 +143,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\_Librerias\MisUtils 0.5b;..\..\_Librerias\SynFacilUtils 0.9;..\..\_Librerias\UtilsGrilla 0.4b;..\..\_Librerias\MiConfig 0.3b;..\..\_Librerias\MotGraf-0.1;ConfigFrames"/>
+      <OtherUnitFiles Value="..\..\_Librerias\MisUtils 0.5b;..\..\_Librerias\SynFacilUtils 0.9;..\..\_Librerias\UtilsGrilla 0.4b;..\..\_Librerias\MiConfig 0.3b;..\..\_Librerias\MotGraf-0.1;ConfigFrames;..\..\_Librerias\Xpres-1.1"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

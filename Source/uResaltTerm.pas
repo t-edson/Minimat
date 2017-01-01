@@ -142,7 +142,7 @@ begin
   //atributo de prompt
   fAtriPrompt  := TSynHighlighterAttributes.Create('Prompt');
   fAtriPrompt.Foreground := clAqua;   //color de letra
-  fAtriPrompt.Style:=[fsBold];
+  fAtriPrompt.Style:=[fsBold, fsUnderline];
 //  fAtriPrompt.Background:= clGreen;
   AddAttribute(fAtriPrompt);
   //atributo de directorio
