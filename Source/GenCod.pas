@@ -53,17 +53,18 @@ type
     procedure flt_procLoad;
     procedure flt_resta_flt;
     procedure flt_suma_flt;
-    procedure fun_close(fun: TxpFun);
-    procedure fun_fileopen(fun: TxpFun);
-    procedure fun_messagebox(fun: TxpFun);
-    procedure fun_messageboxI(fun: TxpFun);
-    procedure fun_puts(fun: TxpFun);
-    procedure fun_putsI(fun: TxpFun);
-    procedure fun_write(fun: TxpFun);
+    procedure fun_close(fun: TxpEleFun);
+    procedure fun_fileopen(fun: TxpEleFun);
+    procedure fun_messagebox(fun: TxpEleFun);
+    procedure fun_messageboxI(fun: TxpEleFun);
+    procedure fun_puts(fun: TxpEleFun);
+    procedure fun_putsI(fun: TxpEleFun);
+    procedure fun_write(fun: TxpEleFun);
     procedure LoadResBol(val: Boolean; catOp: TCatOperan);
     procedure LoadResFloat(const val: Double; const catOp: TCatOperan);
     procedure LoadResInt(val: int64; catOp: TCatOperan);
     procedure LoadResStr(val: string; catOp: TCatOperan);
+    procedure _menos_flt;
     procedure PopResult;
     procedure PushResult;
     procedure str_asig_str;
@@ -203,6 +204,11 @@ begin
   //carga el operando en res
   LoadResFloat(p1^.ReadFloat, p1^.catOp);
 end;
+procedure TGenCod._menos_flt;
+begin
+  //carga el operando en res
+  LoadResFloat(-p1^.ReadFloat, p1^.catOp);
+end;
 procedure TGenCod.flt_asig_flt;
 begin
   if p1^.catOp <> coVariab then begin  //validación
@@ -211,7 +217,7 @@ begin
   //en la VM se puede mover directamente res memoria sin usar el registro res
   p1^.rVar.valFloat := p2^.ReadFloat;
   //Toas las expresiones deben devolver valor
-  LoadResFloat(p1^.valFloat, coExpres);
+  LoadResFloat(p1^.rVar.valFloat, coExpres);
 end;
 procedure TGenCod.flt_suma_flt;
 begin
@@ -296,7 +302,7 @@ begin
 end;
 
 //funciones básicas
-procedure TGenCod.fun_puts(fun :TxpFun);
+procedure TGenCod.fun_puts(fun :TxpEleFun);
 //envia un texto a consola
 begin
   PopResult;  //saca parámetro 1
@@ -304,7 +310,7 @@ begin
   msgbox(stack[sp].valStr);  //sabemos que debe ser String
   //el tipo devuelto lo fijará el framework, al tipo definido
 end;
-procedure TGenCod.fun_putsI(fun :TxpFun);
+procedure TGenCod.fun_putsI(fun :TxpEleFun);
 //envia un texto a consola
 begin
   PopResult;  //saca parámetro 1
@@ -312,21 +318,21 @@ begin
   msgbox(IntToStr(stack[sp].valInt));  //sabemos que debe ser Entero
   //el tipo devuelto lo fijará el framework, al tipo definido
 end;
-procedure TGenCod.fun_messagebox(fun :TxpFun);
+procedure TGenCod.fun_messagebox(fun :TxpEleFun);
 begin
   PopResult;  //saca parámetro 1
   if HayError then exit;
   msgbox(stack[sp].valStr);  //sabemos que debe ser String
   //el tipo devuelto lo fijará el framework, al tipo definido
 end;
-procedure TGenCod.fun_messageboxI(fun :TxpFun);
+procedure TGenCod.fun_messageboxI(fun :TxpEleFun);
 begin
   PopResult;  //saca parámetro 1
   if HayError then exit;
   msgbox(IntToStr(stack[sp].valInt));  //sabemos que debe ser String
   //el tipo devuelto lo fijará el framework, al tipo definido
 end;
-procedure TGenCod.fun_fileopen(fun: TxpFun);
+procedure TGenCod.fun_fileopen(fun: TxpEleFun);
 var
   nom: String;
   modo: Int64;
@@ -352,12 +358,12 @@ begin
     stack[sp].valInt:=Int64(n);
   end;
 end;
-procedure TGenCod.fun_close(fun: TxpFun);
+procedure TGenCod.fun_close(fun: TxpEleFun);
 begin
   PopResult;  //manejador de archivo
   fileclose(stack[sp].valInt);
 end;
-procedure TGenCod.fun_write(fun: TxpFun);
+procedure TGenCod.fun_write(fun: TxpEleFun);
 var
   cad: String;
 begin
@@ -433,7 +439,7 @@ end;
 procedure TGenCod.DefineOperations;
 var
   opr: TxpOperator;
-  f: TxpFun;
+  f: TxpEleFun;
 begin
   ///////////Crea tipos y operaciones
   ClearTypes;
@@ -443,32 +449,33 @@ begin
 
   //////// Operaciones con Float////////////
   tipFlt.OperationLoad:=@flt_procLoad;
-  opr := tipFlt.CreateOperator('=', 2, 'asig');
+  opr := tipFlt.CreateUnaryPreOperator('-', 6, 'signo', @_menos_flt);
+  opr := tipFlt.CreateBinaryOperator('=', 1, 'asig');
   opr.CreateOperation(tipFlt,@flt_asig_flt);
-  opr := tipFlt.CreateOperator('+', 2, 'suma');
+  opr := tipFlt.CreateBinaryOperator('+', 3, 'suma');
   opr.CreateOperation(tipFlt,@flt_suma_flt);
-  opr := tipFlt.CreateOperator('-', 2, 'resta');
+  opr := tipFlt.CreateBinaryOperator('-', 3, 'resta');
   opr.CreateOperation(tipFlt,@flt_resta_flt);
-  opr := tipFlt.CreateOperator('*', 2, 'mult');
+  opr := tipFlt.CreateBinaryOperator('*', 4, 'mult');
   opr.CreateOperation(tipFlt,@flt_mult_flt);
-  opr := tipFlt.CreateOperator('/', 2, 'divi');
+  opr := tipFlt.CreateBinaryOperator('/', 4, 'divi');
   opr.CreateOperation(tipFlt,@flt_divi_flt);
-  opr := tipFlt.CreateOperator('==', 2, 'igual');
+  opr := tipFlt.CreateBinaryOperator('==', 2, 'igual');
   opr.CreateOperation(tipFlt,@flt_igual_flt);
 
   //////// Operaciones con String ////////////
   tipStr.OperationLoad:=@str_procLoad;
 
-  opr:=tipStr.CreateOperator('=',2,'asig');  //asignación
+  opr:=tipStr.CreateBinaryOperator('=',1,'asig');  //asignación
   opr.CreateOperation(tipStr,@str_asig_str);
-  opr:=tipStr.CreateOperator('+',7,'concat');
+  opr:=tipStr.CreateBinaryOperator('+',3,'concat');
   opr.CreateOperation(tipStr,@str_concat_str);
-  opr:=tipStr.CreateOperator('==',7,'igual');
+  opr:=tipStr.CreateBinaryOperator('==',2,'igual');
   opr.CreateOperation(tipStr,@str_igual_str);
 
   //////// Operaciones con Boolean ////////////
   tipBol.OperationLoad:=@bol_procLoad;
-  opr:=tipBol.CreateOperator('=',2,'asig');  //asignación
+  opr:=tipBol.CreateBinaryOperator('=',1,'asig');  //asignación
   opr.CreateOperation(tipBol,@bol_asig_bol);
 
   //////// Funciones básicas ////////////

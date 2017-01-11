@@ -148,11 +148,16 @@ end;
 procedure TCompiler.TipDefecNumber(var Op: TOperand; toknum: string);
 {Sobreescribimos este método para que reconozca a todos los números como flotantes.}
 begin
+  Op.catOp:=coConst;       //constante es Mono Operando
+  Op.txt:= cIn.tok;        //toma el texto
   Op.catTyp := t_float;   //es flotante
   Op.size := 8;
-  Op.valFloat := StrToFloat(toknum);  //No debería fallar, si el lexer hace bien su trabajo
+  //No se incluye tratamiento de error porque no es necesario si el lexer hace bien su
+  //trabajo. La rutina de conversión funciona bien inclusive con números gramdes
+  Op.valFloat := StrToFloat(cIn.tok);
   Op.typ := tipFlt;  //solo hay un tipo flotante
 end;
+
 procedure TCompiler.CompileBlockIF;
 var
   valor, valor2: Boolean;
@@ -286,6 +291,7 @@ instrucciones sucesivas}
 begin
   Perr.Clear;
   cIn.NewContextFromTxt(str,'');
+  ExprLevel := 0;  //inicia
   ExecuteInstruction;
   //Puede salir con error
   if HayError then exit;
