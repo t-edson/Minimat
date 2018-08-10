@@ -1,55 +1,27 @@
-unit FormPrincipal;
+unit FormComTerm;
 {$mode objfpc}{$H+}
 interface
-
 uses
   Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, ActnList, Menus, StdCtrls, Grids, ComCtrls, LCLType, LCLProc,
+  ExtCtrls, Grids, StdCtrls, ComCtrls, LCLType,
   SynEditMarkupHighAll, SynEditKeyCmds, MisUtils, SynFacilUtils, FormGraf3D,
-  uResaltTerm, FormConfig, EvalExpres, Parser, Globales, GenCod, FormComTerm;
-const
-  NUM_CUAD = 20;
-  ZOOM_INI = 12;
+  uResaltTerm, FormConfig, EvalExpres, Parser, Globales, GenCod;
 
 type
 
-  { TfrmPrincipal }
-  TfrmPrincipal = class(TForm)
-    acAyuAcerca: TAction;
-    acVerTermBN: TAction;
-    acVerTerm: TAction;
-    HerConfig: TAction;
-    ActionList1: TActionList;
-    ArcAbrir: TAction;
+  { TfrmComTerm }
+
+  TfrmComTerm = class(TForm)
+    edCom : TSynEdit;
     Label1: TLabel;
-    MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem11: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
     Panel1: TPanel;
     Splitter1: TSplitter;
     StatusBar1: TStatusBar;
     StringGrid1: TStringGrid;
-    edCom: TSynEdit;
-    VerGraf2D: TAction;
-    VerGraf3D: TAction;
-    procedure acAyuAcercaExecute(Sender: TObject);
-    procedure acVerTermBNExecute(Sender: TObject);
-    procedure acVerTermExecute(Sender: TObject);
-    procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure HerConfigExecute(Sender: TObject);
-    procedure VerGraf3DExecute(Sender: TObject);
+    procedure Panel1Click(Sender: TObject);
   private
     eCom      : TSynFacilEditor;
     hlTerm    : TResaltTerm;
@@ -61,19 +33,27 @@ type
     procedure InicTerminal;
     procedure InsertPrompt;
     procedure InsertText(txt: string);
-    function InvalidCursor(x, y: integer; var prmLon: integer): boolean;
+
   public
     cxp : TCompiler;
     ejecMac: boolean;   //indica que se esta´ejecuatando un "script"
-    procedure ActualizarInfoPanel0;
   end;
 
 var
-  frmPrincipal: TfrmPrincipal;
+  frmComTerm: TfrmComTerm;
 
 implementation
+
 {$R *.lfm}
-procedure TfrmPrincipal.InicTerminal;
+
+{ TfrmComTerm }
+
+procedure TfrmComTerm.Panel1Click(Sender: TObject);
+begin
+
+end;
+
+procedure TfrmComTerm.InicTerminal;
 var
   SynMarkup: TSynEditMarkupHighlightAllCaret;  //para resaltar palabras iguales
 begin
@@ -104,7 +84,7 @@ begin
 //  edCom.OnSpecialLineMarkup:=@edTermSpecialLineMarkup;  //solo para corregir falla de resaltado de línea actual
   InsertPrompt;
 end;
-procedure TfrmPrincipal.InsertText(txt: string);
+procedure TfrmComTerm.InsertText(txt: string);
 {Inserta un texto en el panel de comandos, agregando previamente un salto de línea}
 begin
   //Se prefiere usar comandos antes que manipular directamente lines[], para no
@@ -113,36 +93,34 @@ begin
   edCom.ExecuteCommand(ecDown, ' ', nil);
   edCom.InsertTextAtCaret(txt);
 end;
-procedure TfrmPrincipal.InsertPrompt;
+procedure TfrmComTerm.InsertPrompt;
 {Agrega el prompt en la pantalla, después de haber escrito algo en pantalla.}
 begin
   InsertText(Config.fcPanCom.Prompt);
 end;
-function TfrmPrincipal.InvalidCursor(x, y: integer; var prmLon: integer): boolean;
-{Valida si la posición indicada del cursor, cae en una posición prohibida, es decir,
-encima del cursor.
-Devuelve la longitud del prompt en "prmLon"}
-var
-  lin: String;
+procedure TfrmComTerm.FormCreate(Sender: TObject);
 begin
-  if y <1 then exit(false);
-  if y > edCom.Lines.Count then exit(false);
-  lin := edCom.Lines[y-1];
-  prmLon := Config.ContienePrompt(lin);
-  if (prmLon>0) and (X <= prmLon) then begin
-    exit(true);
-  end else begin
-    exit(false);
-  end;
+  hlTerm := TResaltTerm.Create(Self);  //crea resaltador
+  eCom := TSynFacilEditor.Create(edCom,'SinNombre','sh');   //Crea Editor
+  eCom.PanCursorPos := StatusBar1.Panels[2];  //panel para la posición del cursor
+  eCom.OnKeyDown:=@eCom_KeyDown;
+  eCom.OnKeyUp:=@eComKeyUp;
+  eCom.OnKeyPress:=@eComKeyPress;
+  eval := TEvalExpres.Create;  //Crea su evaluador de expresiones
+  cxp := TCompiler.Create;
 end;
-procedure TfrmPrincipal.ActualizarInfoPanel0;
-//Actualiza el panel 0, con información de la conexión o de la ejecución de macros
+procedure TfrmComTerm.FormShow(Sender: TObject);
 begin
-   StatusBar1.Panels[0].Text:='Listo.';
-   //refresca para asegurarse, porque el panel 0 está en modo gráfico
-   StatusBar1.InvalidatePanel(0,[ppText]);
+  InicTerminal;   //configura después de iniciar "Config"
 end;
-procedure TfrmPrincipal.EjecutarComando(txt: string);
+procedure TfrmComTerm.FormDestroy(Sender: TObject);
+begin
+  cxp.Destroy;
+  eval.Destroy;
+  eCom.Free;
+  hlTerm.Free;
+end;
+procedure TfrmComTerm.EjecutarComando(txt: string);
 var
   long: Integer;
 begin
@@ -162,7 +140,7 @@ begin
     end;
   end;
 end;
-procedure TfrmPrincipal.eCom_KeyDown(Sender: TObject; var Key: Word;
+procedure TfrmComTerm.eCom_KeyDown(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   cad: String;
@@ -190,7 +168,7 @@ begin
     end;
   end;
 end;
-procedure TfrmPrincipal.eComKeyUp(Sender: TObject; var Key: Word;
+procedure TfrmComTerm.eComKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 var
   prmLon: integer;
@@ -201,7 +179,7 @@ begin
     edCom.CaretX:=prmLon+1;
   end;
 end;
-procedure TfrmPrincipal.eComKeyPress(Sender: TObject; var Key: char);
+procedure TfrmComTerm.eComKeyPress(Sender: TObject; var Key: char);
 begin
   if edCom.CaretY = edCom.Lines.Count then begin
     //Es última línea, deja pasar todo
@@ -209,67 +187,7 @@ begin
     Key := #0;   //no permite la edición, en estas líneas
   end;
 end;
-procedure TfrmPrincipal.FormCreate(Sender: TObject);
-begin
-  hlTerm := TResaltTerm.Create(Self);  //crea resaltador
-  eCom := TSynFacilEditor.Create(edCom,'SinNombre','sh');   //Crea Editor
-  eCom.PanCursorPos := StatusBar1.Panels[2];  //panel para la posición del cursor
-  eCom.OnKeyDown    := @eCom_KeyDown;
-  eCom.OnKeyUp      := @eComKeyUp;
-  eCom.OnKeyPress   := @eComKeyPress;
-  eval := TEvalExpres.Create;  //Crea su evaluador de expresiones
-  cxp := TCompiler.Create;
-end;
-procedure TfrmPrincipal.FormShow(Sender: TObject);
-begin
-  Config.SetLanguage('en');
-  //aquí ya sabemos que Config está creado. Lo configuramos
-  Config.edTerm := edCom;  //pasa referencia de editor.
 
-  Config.Iniciar(nil);  //Inicia la configuración
-  InicTerminal;   //configura después de iniciar "Config"
-VerGraf3DExecute(self);
-frmGraf3D.btnGraficClick(self);
-frmGraf3D.SetFocus;
-end;
-procedure TfrmPrincipal.FormClose(Sender: TObject; var CloseAction: TCloseAction
-  );
-begin
-  Config.escribirArchivoIni();
-end;
-procedure TfrmPrincipal.FormDestroy(Sender: TObject);
-begin
-  cxp.Destroy;
-  eval.Destroy;
-  eCom.Free;
-  hlTerm.Free;
-end;
-///////////////////////////// Acciones ///////////////////////////////
-procedure TfrmPrincipal.VerGraf3DExecute(Sender: TObject);
-begin
-  frmGraf3D.Show;
-end;
-procedure TfrmPrincipal.HerConfigExecute(Sender: TObject);
-begin
-  Config.Configurar();
-end;
-procedure TfrmPrincipal.acAyuAcercaExecute(Sender: TObject);
-begin
-  msgbox(NOM_PROG + ' - ' + VER_PROG);
-end;
-procedure TfrmPrincipal.acVerTermExecute(Sender: TObject);
-{Terminal commún.}
-var
-  frm: TfrmComTerm;
-begin
-  frm := TfrmComTerm.Create(self);
-  frm.Show;
-end;
-procedure TfrmPrincipal.acVerTermBNExecute(Sender: TObject);
-{Terminal de números grandes.}
-begin
-
-end;
 
 end.
 

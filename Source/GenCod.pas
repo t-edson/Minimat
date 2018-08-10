@@ -71,18 +71,22 @@ type
     procedure str_concat_str;
     procedure str_igual_str;
     procedure str_procLoad;
-  protected
-    //referencias de tipos adicionales de tokens
-    tkStruct   : TSynHighlighterAttributes;
-    tkExpDelim : TSynHighlighterAttributes;
-    tkBlkDelim : TSynHighlighterAttributes;
-    tkOthers   : TSynHighlighterAttributes;
+  protected   //Tipos adicionales de tokens
+    tnStruct   : integer;
+    tnExpDelim : integer;
+    tnBlkDelim : integer;
+    tnOthers   : integer;
     procedure Cod_StartData;
     procedure Cod_StartProgram;
     procedure Cod_EndProgram;
     procedure expr_start;
     procedure expr_end(isParam: boolean);
   public
+    /////// Tipos de datos del lenguaje ////////////
+    tipInt : TType;   //Entero
+    tipFlt : TType;   //Coma flotante
+    tipStr : Ttype;   //Cadena
+    tipBol : TType;   //Booleano
     //Pila virtual
     {La pila virtual se representa con una tabla. Cada vez que se agrega un valor con
     pushResult, se incrementa "sp". Para retornar "sp" a su valor original, se debe llamar
@@ -98,12 +102,6 @@ type
     procedure DefineOperations;
   end;
 
-var
-  /////// Tipos de datos del lenguaje ////////////
-  tipInt : TType;   //entero
-  tipFlt : TType;   //Coma flotante
-  tipStr : Ttype;   //cadena
-  tipBol  : TType;  //booleano
 
 implementation
 
@@ -380,24 +378,24 @@ begin
   OnExprStart := @expr_start;
   OnExprEnd := @expr_End;
   ///////////// Crea tipos de tokens personalizados /////////
-  tkExpDelim := xLex.NewTokType('ExpDelim');//delimitador de expresión ";"
-  tkBlkDelim := xLex.NewTokType('BlkDelim'); //delimitador de bloque
-  tkStruct   := xLex.NewTokType('Struct');   //personalizado
-  tkOthers   := xLex.NewTokType('Others');   //personalizado
+  tnExpDelim := xLex.NewTokType('ExpDelim');//delimitador de expresión ";"
+  tnBlkDelim := xLex.NewTokType('BlkDelim'); //delimitador de bloque
+  tnStruct   := xLex.NewTokType('Struct');   //personalizado
+  tnOthers   := xLex.NewTokType('Others');   //personalizado
   //Configura apariencia
   tkKeyword.Style := [fsBold];     //en negrita
-  tkBlkDelim.Foreground:=clGreen;
-  tkBlkDelim.Style := [fsBold];    //en negrita
-  tkStruct.Foreground:=clGreen;
-  tkStruct.Style := [fsBold];     //en negrita
+  xLex.Attrib[tnBlkDelim].Foreground:=clGreen;
+  xLex.Attrib[tnBlkDelim].Style := [fsBold];    //en negrita
+  xLex.Attrib[tnStruct].Foreground:=clGreen;
+  xLex.Attrib[tnStruct].Style := [fsBold];      //en negrita
   ///////////////// Configura la sintaxis /////////////////////
   xLex.ClearMethodTables;           //limpìa tabla de métodos
   xLex.ClearSpecials;               //para empezar a definir tokens
   //crea tokens por contenido
   xLex.DefTokIdentif('[$A-Za-z_]', '[A-Za-z0-9_]*');
-  //Definiicón completa de números en coma flotante
+  //Definición completa de números en coma flotante
   //xLex.DefTokContent('[0-9]', '[0-9.]*', tkNumber);
-  p := xLex.DefTokContent('[0-9]', tkNumber);
+  p := xLex.DefTokContent('[0-9]', tnNumber);
   p.AddInstruct('[0-9]*');
   p.AddInstruct('[\.]','','move(+2)');
   p.AddInstruct('[0-9]+','','exit(-1)');
@@ -407,31 +405,32 @@ begin
   //Define palabras claves.
   {Notar que si se modifica aquí, se debería también, actualizar el archivo XML de
   sintaxis, para que el resaltado y completado sea consistente.}
-  xLex.AddIdentSpecList('ENDIF ELSE ELSEIF', tkBlkDelim);
-  xLex.AddIdentSpecList('true false', tkBoolean);
-  xLex.AddIdentSpecList('CLEAR CONNECT CONNECTSSH DISCONNECT SENDLN WAIT PAUSE STOP', tkSysFunct);
-  xLex.AddIdentSpecList('LOGOPEN LOGWRITE LOGCLOSE LOGPAUSE LOGSTART', tkSysFunct);
-  xLex.AddIdentSpecList('FILEOPEN FILECLOSE FILEWRITE', tkSysFunct);
-  xLex.AddIdentSpecList('MESSAGEBOX CAPTURE ENDCAPTURE EDIT DETECT_PROMPT', tkSysFunct);
-  xLex.AddIdentSpecList('IF', tkStruct);
-  xLex.AddIdentSpecList('THEN', tkKeyword);
+  xLex.AddIdentSpecList('ENDIF ELSE ELSEIF', tnBlkDelim);
+  xLex.AddIdentSpecList('true false', tnBoolean);
+  xLex.AddIdentSpecList('CLEAR CONNECT CONNECTSSH DISCONNECT SENDLN WAIT PAUSE STOP', tnSysFunct);
+  xLex.AddIdentSpecList('LOGOPEN LOGWRITE LOGCLOSE LOGPAUSE LOGSTART', tnSysFunct);
+  xLex.AddIdentSpecList('FILEOPEN FILECLOSE FILEWRITE', tnSysFunct);
+  xLex.AddIdentSpecList('MESSAGEBOX CAPTURE ENDCAPTURE EDIT DETECT_PROMPT', tnSysFunct);
+  xLex.AddIdentSpecList('IF', tnStruct);
+  xLex.AddIdentSpecList('THEN', tnKeyword);
   //símbolos especiales
-  xLex.AddSymbSpec(';',  tkExpDelim);
-  xLex.AddSymbSpec(',',  tkExpDelim);
-  xLex.AddSymbSpec('+',  tkOperator);
-  xLex.AddSymbSpec('-',  tkOperator);
-  xLex.AddSymbSpec('*',  tkOperator);
-  xLex.AddSymbSpec('/',  tkOperator);
-  xLex.AddSymbSpec('=',  tkOperator);
-  xLex.AddSymbSpec('==', tkOperator);
-  xLex.AddSymbSpec('(',  tkOthers);
-  xLex.AddSymbSpec(')',  tkOthers);
-  xLex.AddSymbSpec(':',  tkOthers);
+  xLex.AddSymbSpec(';',  tnExpDelim);
+  xLex.AddSymbSpec(',',  tnExpDelim);
+  xLex.AddSymbSpec('+',  tnOperator);
+  xLex.AddSymbSpec('-',  tnOperator);
+  xLex.AddSymbSpec('*',  tnOperator);
+  xLex.AddSymbSpec('/',  tnOperator);
+  xLex.AddSymbSpec('^',  tnOperator);
+  xLex.AddSymbSpec('=',  tnOperator);
+  xLex.AddSymbSpec('==', tnOperator);
+  xLex.AddSymbSpec('(',  tnOthers);
+  xLex.AddSymbSpec(')',  tnOthers);
+  xLex.AddSymbSpec(':',  tnOthers);
   //crea tokens delimitados
-  xLex.DefTokDelim('''','''', tkString);
-  xLex.DefTokDelim('"','"', tkString);
-  xLex.DefTokDelim('//','', xLex.tkComment);
-  xLex.DefTokDelim('/\*','\*/', xLex.tkComment, tdMulLin);
+  xLex.DefTokDelim('''','''', tnString);
+  xLex.DefTokDelim('"','"', tnString);
+  xLex.DefTokDelim('//','', xLex.tnComment);
+  xLex.DefTokDelim('/\*','\*/', xLex.tnComment, tdMulLin);
   //define bloques de sintaxis
   xLex.AddBlock('[',']');
   xLex.Rebuild;   //es necesario para terminar la definición
@@ -443,8 +442,9 @@ var
 begin
   ///////////Crea tipos y operaciones
   ClearTypes;
-  tipFlt := CreateType('float', t_float, 8);   //de 8 bytes
-  tipStr := CreateType('string',t_string,-1);   //de longitud variable
+  tipInt := CreateType('int'   , t_integer, 8);
+  tipFlt := CreateType('float' , t_float, 8);   //de 8 bytes
+  tipStr := CreateType('string', t_string,-1);   //de longitud variable
   tipBol := CreateType('boolean',t_boolean,1);
 
   //////// Operaciones con Float////////////
@@ -459,6 +459,8 @@ begin
   opr := tipFlt.CreateBinaryOperator('*', 4, 'mult');
   opr.CreateOperation(tipFlt,@flt_mult_flt);
   opr := tipFlt.CreateBinaryOperator('/', 4, 'divi');
+  opr.CreateOperation(tipFlt,@flt_divi_flt);
+  opr := tipFlt.CreateBinaryOperator('^', 4, 'divi');
   opr.CreateOperation(tipFlt,@flt_divi_flt);
   opr := tipFlt.CreateBinaryOperator('==', 2, 'igual');
   opr.CreateOperation(tipFlt,@flt_igual_flt);

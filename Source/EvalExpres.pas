@@ -309,7 +309,7 @@ begin
     exit(false);        //no es constante cadena
   s := '';         //inicia para acumular
   //busca hasta encontar fin de identificador
-  while not cEnt.FinCont and (cEnt.VerCar in ['a'..'z','A'..'Z']) do begin
+  while not cEnt.FinCont and (cEnt.VerCar in ['0'..'9','a'..'z','A'..'Z']) do begin
     s += cEnt.CogCar;
   end;
   Result := true;    //indica que se encontró identificador

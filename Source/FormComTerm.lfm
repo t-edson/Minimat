@@ -1,21 +1,56 @@
-object frmPrincipal: TfrmPrincipal
-  Left = 353
-  Height = 509
-  Top = 171
-  Width = 736
-  Caption = 'Tito''s Minimat'
-  ClientHeight = 489
-  ClientWidth = 736
-  Menu = MainMenu1
-  OnClose = FormClose
+object frmComTerm: TfrmComTerm
+  Left = 271
+  Height = 369
+  Top = 401
+  Width = 625
+  Caption = 'Terminal Común'
+  ClientHeight = 369
+  ClientWidth = 625
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  Position = poDesktopCenter
   LCLVersion = '1.6.2.0'
-  inline edCom: TSynEdit
+  object Panel1: TPanel
     Left = 0
-    Height = 466
+    Height = 346
+    Top = 0
+    Width = 176
+    Align = alLeft
+    ClientHeight = 346
+    ClientWidth = 176
+    TabOrder = 0
+    OnClick = Panel1Click
+    object StringGrid1: TStringGrid
+      Left = 1
+      Height = 328
+      Top = 17
+      Width = 174
+      Align = alClient
+      TabOrder = 0
+    end
+    object Label1: TLabel
+      Left = 1
+      Height = 16
+      Top = 1
+      Width = 174
+      Align = alTop
+      Alignment = taCenter
+      AutoSize = False
+      Caption = 'Inspector de Variables'
+      Color = clActiveCaption
+      ParentColor = False
+      Transparent = False
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 625
+    Height = 346
+    Top = 0
+    Width = 5
+  end
+  inline edCom: TSynEdit
+    Left = 176
+    Height = 346
     Top = 0
     Width = 555
     Align = alLeft
@@ -26,7 +61,7 @@ object frmPrincipal: TfrmPrincipal
     Font.Quality = fqNonAntialiased
     ParentColor = False
     ParentFont = False
-    TabOrder = 0
+    TabOrder = 2
     Gutter.Width = 29
     Gutter.MouseActions = <>
     RightGutter.Width = 0
@@ -515,48 +550,11 @@ object frmPrincipal: TfrmPrincipal
       end
     end
   end
-  object Splitter1: TSplitter
-    Left = 555
-    Height = 466
-    Top = 0
-    Width = 5
-  end
-  object Panel1: TPanel
-    Left = 560
-    Height = 466
-    Top = 0
-    Width = 176
-    Align = alClient
-    ClientHeight = 466
-    ClientWidth = 176
-    TabOrder = 2
-    object StringGrid1: TStringGrid
-      Left = 1
-      Height = 448
-      Top = 17
-      Width = 174
-      Align = alClient
-      TabOrder = 0
-    end
-    object Label1: TLabel
-      Left = 1
-      Height = 16
-      Top = 1
-      Width = 174
-      Align = alTop
-      Alignment = taCenter
-      AutoSize = False
-      Caption = 'Inspector de Variables'
-      Color = clActiveCaption
-      ParentColor = False
-      Transparent = False
-    end
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
-    Top = 466
-    Width = 736
+    Top = 346
+    Width = 625
     Panels = <    
       item
         Width = 80
@@ -568,79 +566,5 @@ object frmPrincipal: TfrmPrincipal
         Width = 80
       end>
     SimplePanel = False
-  end
-  object ActionList1: TActionList
-    left = 364
-    top = 188
-    object ArcAbrir: TAction
-      Category = 'Arc'
-      Caption = '&Open...'
-    end
-    object VerGraf2D: TAction
-      Category = 'Ver'
-      Caption = 'View 2D Graph ...'
-    end
-    object VerGraf3D: TAction
-      Category = 'Ver'
-      Caption = 'View 3D Graph ...'
-      OnExecute = VerGraf3DExecute
-    end
-    object HerConfig: TAction
-      Category = 'Her'
-      Caption = 'Confi&guración'
-      OnExecute = HerConfigExecute
-    end
-    object acAyuAcerca: TAction
-      Category = 'Ayu'
-      Caption = 'Acerca de ...'
-      OnExecute = acAyuAcercaExecute
-    end
-    object acVerTerm: TAction
-      Category = 'Ver'
-      Caption = '&Common Terminal'
-      OnExecute = acVerTermExecute
-    end
-    object acVerTermBN: TAction
-      Category = 'Ver'
-      Caption = '&Big Number Terminal'
-      OnExecute = acVerTermBNExecute
-    end
-  end
-  object MainMenu1: TMainMenu
-    left = 364
-    top = 119
-    object MenuItem1: TMenuItem
-      Caption = '&Archivo'
-      object MenuItem2: TMenuItem
-        Action = ArcAbrir
-      end
-    end
-    object MenuItem3: TMenuItem
-      Caption = '&Ver'
-      object MenuItem11: TMenuItem
-        Action = acVerTerm
-      end
-      object MenuItem10: TMenuItem
-        Action = acVerTermBN
-      end
-      object MenuItem4: TMenuItem
-        Action = VerGraf2D
-      end
-      object MenuItem5: TMenuItem
-        Action = VerGraf3D
-      end
-    end
-    object MenuItem6: TMenuItem
-      Caption = '&Herramientas'
-      object MenuItem7: TMenuItem
-        Action = HerConfig
-      end
-    end
-    object MenuItem8: TMenuItem
-      Caption = 'Ay&uda'
-      object MenuItem9: TMenuItem
-        Action = acAyuAcerca
-      end
-    end
   end
 end
