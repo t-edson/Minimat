@@ -20,10 +20,11 @@
           <Version Value="11"/>
           <PathDelim Value="\"/>
           <Target>
-            <Filename Value="Minimat"/>
+            <Filename Value="..\Minimat"/>
           </Target>
           <SearchPaths>
             <IncludeFiles Value="$(ProjOutDir)"/>
+            <OtherUnitFiles Value="..\..\_Librerias\MisUtils 0.5;..\..\_Librerias\SynFacilUtils-1.21;..\..\_Librerias\UtilsGrilla-0.8;..\..\_Librerias\MiConfig 0.3;..\..\_Librerias\MotGraf-0.2;ConfigFrames;..\..\_Librerias\Xpres-1.3.2"/>
             <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
           </SearchPaths>
           <CodeGeneration>
@@ -147,7 +148,7 @@
     </Target>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\_Librerias\MisUtils 0.5;..\..\_Librerias\SynFacilUtils-1.21;..\..\_Librerias\UtilsGrilla 0.8;..\..\_Librerias\MiConfig 0.3;..\..\_Librerias\MotGraf-0.2;ConfigFrames;..\..\_Librerias\Xpres-1.3.2"/>
+      <OtherUnitFiles Value="..\..\_Librerias\MisUtils 0.5;..\..\_Librerias\SynFacilUtils-1.21;..\..\_Librerias\UtilsGrilla-0.8;..\..\_Librerias\MiConfig 0.3;..\..\_Librerias\MotGraf-0.2;ConfigFrames;..\..\_Librerias\Xpres-1.3.2"/>
       <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
     </SearchPaths>
     <Parsing>

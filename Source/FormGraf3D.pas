@@ -5,23 +5,28 @@ uses
   Classes, SysUtils, FileUtil, SynEdit, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ExtCtrls, StdCtrls, EvalExpres, MotGraf3d;
 const
-  NUM_CUAD = 20;
+  NUM_CUAD = 30;
+  OFF_X = NUM_CUAD div 2;
+  OFF_Y = NUM_CUAD div 2;
   ZOOM_INI = 12;
 
 type
   { TfrmGraf3D }
   TfrmGraf3D = class(TForm)
     btnGrafic: TButton;
+    chkRotar: TCheckBox;
     ColorButton1: TColorButton;
     Edit1: TEdit;
     Label1: TLabel;
     PaintBox1: TPaintBox;
     Panel1: TPanel;
+    Timer1: TTimer;
     procedure btnGraficClick(Sender: TObject);
     procedure Edit1KeyPress(Sender: TObject; var Key: char);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure PaintBox1Paint(Sender: TObject);
+    procedure Timer1Timer(Sender: TObject);
   private
     exp: TEvalExpres;
     mot: TMotGraf;
@@ -51,10 +56,9 @@ begin
      exit;
   end;
   //No hubo error. Calcula valores para graficar
-  x := -10;    //Valor inicial de exploración
-  y := -10;    //Valor inicial de exploración
+  x := -OFF_X;    //Valor inicial de exploración
   for ix:=0 to NUM_CUAD-1 do begin
-    y:=-10;
+    y := -OFF_Y;    //Valor inicial de exploración
     for iy := 0 to NUM_CUAD-1 do begin
       exp.vars[varx].valor := x;  //asigna rápidamente
       exp.vars[vary].valor := y;  //asigna rápidamente
@@ -80,16 +84,23 @@ begin
   //Líneas en X
   for iy := 0 to NUM_CUAD-1 do begin
     for ix:=0 to NUM_CUAD-2 do begin
-      mot.Line(ix  , iy, cuad[ix  , iy],
-               ix+1, iy, cuad[ix+1, iy]);
+      mot.Line(ix  - OFF_X, iy - OFF_Y, cuad[ix  , iy],
+               ix+1- OFF_X, iy - OFF_Y, cuad[ix+1, iy]);
     end;
   end;
   //Líneas en Y
   for ix := 0 to NUM_CUAD-1 do begin
     for iy:=0 to NUM_CUAD-2 do begin
-      mot.Line(ix, iy  , cuad[ix, iy],
-               ix, iy+1, cuad[ix, iy+1]);
+      mot.Line(ix- OFF_X, iy   - OFF_Y, cuad[ix, iy],
+               ix- OFF_X, iy+1 - OFF_Y, cuad[ix, iy+1]);
     end;
+  end;
+end;
+procedure TfrmGraf3D.Timer1Timer(Sender: TObject);
+begin
+  if chkRotar.Checked then begin
+    mot.Alfa := mot.Alfa + 0.02;
+    PaintBox1.Invalidate;
   end;
 end;
 procedure TfrmGraf3D.Edit1KeyPress(Sender: TObject; var Key: char);
@@ -104,8 +115,8 @@ begin
   exp := TEvalExpres.Create;
   mot:= TMotGraf.Create(PaintBox1);
   mot.Zoom := ZOOM_INI;
-  mot.x_des:=10;
-  mot.y_des:=120;
+  mot.x_des:=250;
+  mot.y_des:=200;
   mot.Alfa:=-0.78;
   mot.Fi:=0.78;
   mot.backColor:=clBlack;
